@@ -16,8 +16,8 @@ def test_parsing():
     )
     assert e.contexts
     assert len(e.contexts) == 2
-    assert hasattr(e.contexts[0], "text") and  e.contexts[0].text == "spoiler " # type: ignore
-    assert hasattr(e.contexts[1], "text") and  e.contexts[1].text == "url" # type: ignore
+    assert hasattr(e.contexts[0], "text") and e.contexts[0].text == "spoiler "  # type: ignore
+    assert hasattr(e.contexts[1], "text") and e.contexts[1].text == "url"  # type: ignore
     assert e.contexts[1]._e == "link"
 
 
@@ -25,10 +25,17 @@ def test_parsing_errors():
     # e tag
     with pytest.raises(RTDecodeError):
         SpoilerText.parse({"e": "t", "c": []})
+    # no c
     with pytest.raises(RTDecodeError):
         SpoilerText.parse({"e": "spoilertext", "t": 0})
+    # wrong c
     with pytest.raises(RTDecodeError):
-        SpoilerText.parse({"e": "spoilertext", "c": 0})
+        SpoilerText.parse({"e": "spoilertext", "c": [0, "a"]})
+    # wrong c
+    with pytest.raises(RTDecodeError):
+        SpoilerText.parse(
+            {"e": "spoilertext", "c": [{"e": "spoilertext", "c": [{"e": "text", "t": "spoiler "}]}]}
+        )
 
 
 def test_equals():

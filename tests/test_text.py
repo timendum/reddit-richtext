@@ -18,6 +18,7 @@ def test_parsing_errors():
     # e tag
     with pytest.raises(RTDecodeError):
         Text.parse({"e": "t", "t": "content"})
+    # wrong t
     with pytest.raises(RTDecodeError):
         Text.parse({"e": "text", "t": 0})
 

@@ -746,5 +746,3 @@ def test_parsing():
         }
     )
     pprint(e)
-
-test_parsing()
