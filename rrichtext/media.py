@@ -21,9 +21,9 @@ class Image(_ElementNode):
     def parse(cls, obj: JSONType) -> "Image":
         cls._validate(obj)
         return cls(
-            cls._get_jobj_value(obj, ("id",), str),
-            cls._get_jobj_value(obj, ("c",), str, True),
-            cls._get_jobj_value(obj, ("o",), str, True),
+            cls._get_jobj_value(obj, "id", str),
+            cls._get_jobj_value(obj, "c", str, True),
+            cls._get_jobj_value(obj, "o", str, True),
         )
 
 
@@ -48,9 +48,9 @@ class AnimatedImage(_ElementNode):
     def parse(cls, obj: JSONType) -> "AnimatedImage":
         cls._validate(obj)
         return cls(
-            cls._get_jobj_value(obj, ("id",), str),
-            cls._get_jobj_value(obj, ("c",), str, True),
-            cls._get_jobj_value(obj, ("o",), str, True),
+            cls._get_jobj_value(obj, "id", str),
+            cls._get_jobj_value(obj, "c", str, True),
+            cls._get_jobj_value(obj, "o", str, True),
         )
 
 
@@ -80,13 +80,13 @@ class Video(_ElementNode):
     @classmethod
     def parse(cls, obj: JSONType):
         cls._validate(obj)
-        p = cls._get_jobj_value(obj, ("p",), dict, True)
+        p = cls._get_jobj_value(obj, "p", dict, True)
         return cls(
-            cls._get_jobj_value(obj, ("id",), str),
-            cls._get_jobj_value(obj, ("c",), str, True),
-            cls._get_jobj_value(obj, ("o",), str, True),
+            cls._get_jobj_value(obj, "id", str),
+            cls._get_jobj_value(obj, "c", str, True),
+            cls._get_jobj_value(obj, "o", str, True),
             Image.parse(p) if p else None,
-            cls._get_jobj_value(obj, ("convertToGif",), bool, True),
+            cls._get_jobj_value(obj, "convertToGif", bool, True),
         )
 
 

@@ -35,24 +35,14 @@ class _ElementNode:
             raise RTDecodeError("Wrong e tag value", obj)
 
     @staticmethod
-    def _get_jobj_value(obj: JSONType, keys: tuple[str], classinfo, optional=False) -> Any:
-        for k in keys[0 : len(keys) - 2]:
-            if not isinstance(obj, dict) or k not in obj:
-                if not optional:
-                    raise RTDecodeError("obj not a valid", obj)
-                else:
-                    return None
-            if not isinstance(obj[k], dict):
-                raise RTDecodeError("obj not a valid", obj)
-            obj = obj[k]
-        k = keys[-1]
-        if not isinstance(obj, dict) or k not in obj:
+    def _get_jobj_value(obj: JSONType, key: str, classinfo, optional=False) -> Any:
+        if not isinstance(obj, dict) or key not in obj:
             if not optional:
                 raise RTDecodeError("obj not a valid", obj)
             return None
-        if not isinstance(obj[k], classinfo):
-            raise RTDecodeError(f"obj not a valid: got {type(obj[k])} expecting {classinfo}", obj)
-        return obj.get(k, None)
+        if not isinstance(obj[key], classinfo):
+            raise RTDecodeError(f"obj not a valid: got {type(obj[key])} expecting {classinfo}", obj)
+        return obj.get(key, None)
 
     @classmethod
     def parse(cls, obj: JSONType) -> "_ElementNode":  # pragma: no cover

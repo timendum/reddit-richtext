@@ -13,7 +13,7 @@ class CommentLink(_ElementNode):
     @classmethod
     def parse(cls, obj: JSONType) -> "CommentLink":
         cls._validate(obj)
-        return cls(cls._get_jobj_value(obj, ("t",), str))
+        return cls(cls._get_jobj_value(obj, "t", str))
 
 
 CommentLink._e = "c/"
@@ -29,7 +29,7 @@ class PostLink(_ElementNode):
     @classmethod
     def parse(cls, obj: JSONType) -> "PostLink":
         cls._validate(obj)
-        return cls(cls._get_jobj_value(obj, ("t",), str))
+        return cls(cls._get_jobj_value(obj, "t", str))
 
 
 PostLink._e = "p/"
@@ -46,9 +46,7 @@ class SubredditLink(_ElementNode):
     @classmethod
     def parse(cls, obj: JSONType) -> "SubredditLink":
         cls._validate(obj)
-        return cls(
-            cls._get_jobj_value(obj, ("t",), str), cls._get_jobj_value(obj, ("l",), bool, True)
-        )
+        return cls(cls._get_jobj_value(obj, "t", str), cls._get_jobj_value(obj, "l", bool, True))
 
 
 SubredditLink._e = "r/"
@@ -65,7 +63,7 @@ class UserLink(_ElementNode):
     @classmethod
     def parse(cls, obj: JSONType) -> "UserLink":
         cls._validate(obj)
-        return cls(cls._get_jobj_value(obj, ("t",), str), cls._get_jobj_value(obj, ("l",), bool))
+        return cls(cls._get_jobj_value(obj, "t", str), cls._get_jobj_value(obj, "l", bool))
 
 
 UserLink._e = "u"
@@ -82,7 +80,7 @@ class UserMention(_ElementNode):
     @classmethod
     def parse(cls, obj: JSONType) -> "UserMention":
         cls._validate(obj)
-        return cls(cls._get_jobj_value(obj, ("t",), str), cls._get_jobj_value(obj, ("l",), bool))
+        return cls(cls._get_jobj_value(obj, "t", str), cls._get_jobj_value(obj, "l", bool))
 
 
 UserMention._e = "@"

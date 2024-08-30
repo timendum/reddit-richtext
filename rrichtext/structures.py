@@ -18,9 +18,7 @@ class Paragraph(_ElementNode):
     @classmethod
     def parse(cls, obj: JSONType) -> "Paragraph":
         cls._validate(obj)
-        return cls(
-            _parse_element_list(cls._get_jobj_value(obj, ("c",), list), _ParagraphContentNode)
-        )
+        return cls(_parse_element_list(cls._get_jobj_value(obj, "c", list), _ParagraphContentNode))
 
 
 Paragraph._e = "par"
@@ -41,8 +39,8 @@ class Heading(_ElementNode):
     def parse(cls, obj: JSONType) -> "Heading":
         cls._validate(obj)
         return cls(
-            cls._get_jobj_value(obj, ("l",), int),
-            _parse_element_list(cls._get_jobj_value(obj, ("c",), list), _HeadingText),
+            cls._get_jobj_value(obj, "l", int),
+            _parse_element_list(cls._get_jobj_value(obj, "c", list), _HeadingText),
         )
 
 
@@ -60,7 +58,7 @@ class ListElement(_ElementNode):
     def parse(cls, obj: JSONType) -> "ListElement":
         cls._validate(obj)
         return cls(
-            _parse_element_list(cls._get_jobj_value(obj, ("c",), list), _ListChild),
+            _parse_element_list(cls._get_jobj_value(obj, "c", list), _ListChild),
         )
 
 
@@ -79,8 +77,8 @@ class List(_ElementNode):
     def parse(cls, obj: JSONType) -> "List":
         cls._validate(obj)
         return cls(
-            cls._get_jobj_value(obj, ("o",), bool),
-            _parse_element_list(cls._get_jobj_value(obj, ("c",), list), ListElement),
+            cls._get_jobj_value(obj, "o", bool),
+            _parse_element_list(cls._get_jobj_value(obj, "c", list), ListElement),
         )
 
 
@@ -89,7 +87,7 @@ List._e = "list"
 
 @dataclass
 class BlockQuote(_ElementNode):
-    content: list["BlockQuoteNode"]
+    content: list["_BlockQuoteNode"]
     author: _TextNode | None = None
 
     def to_jobj(self) -> JSONType:
@@ -101,9 +99,9 @@ class BlockQuote(_ElementNode):
     @classmethod
     def parse(cls, obj: JSONType) -> "BlockQuote":
         cls._validate(obj)
-        a = cls._get_jobj_value(obj, ("a",), dict, True)
+        a = cls._get_jobj_value(obj, "a", dict, True)
         return cls(
-            _parse_element_list(cls._get_jobj_value(obj, ("c",), list), _BlockQuoteNode),
+            _parse_element_list(cls._get_jobj_value(obj, "c", list), _BlockQuoteNode),
             _parse_element(a, _TextNode) if a else None,
         )
 

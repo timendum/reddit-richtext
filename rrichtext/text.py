@@ -19,7 +19,7 @@ class Text(_ElementNode):
     def parse(cls, obj: JSONType) -> "Text":
         cls._validate(obj)
         return cls(
-            cls._get_jobj_value(obj, ("t",), str),
+            cls._get_jobj_value(obj, "t", str),
             FormatRange.parse_formatRange(obj),
         )
 
@@ -46,10 +46,10 @@ class Link(_ElementNode):
     def parse(cls, obj: JSONType) -> "Link":
         cls._validate(obj)
         return cls(
-            cls._get_jobj_value(obj, ("t",), str),
-            cls._get_jobj_value(obj, ("u",), str),
+            cls._get_jobj_value(obj, "t", str),
+            cls._get_jobj_value(obj, "u", str),
             FormatRange.parse_formatRange(obj),
-            cls._get_jobj_value(obj, ("a",), str, True) or "",
+            cls._get_jobj_value(obj, "a", str, True) or "",
         )
 
 
@@ -82,7 +82,7 @@ class SpoilerText(_ElementNode):
     @classmethod
     def parse(cls, obj: JSONType) -> "SpoilerText":
         cls._validate(obj)
-        return cls(_parse_element_list(cls._get_jobj_value(obj, ("c",), list), _PlainText))
+        return cls(_parse_element_list(cls._get_jobj_value(obj, "c", list), _PlainText))
 
 
 SpoilerText._e = "spoilertext"
@@ -102,7 +102,7 @@ class RawText(_ElementNode):
     def parse(cls, obj: JSONType) -> "RawText":
         cls._validate(obj)
         return cls(
-            cls._get_jobj_value(obj, ("t",), str),
+            cls._get_jobj_value(obj, "t", str),
         )
 
 
