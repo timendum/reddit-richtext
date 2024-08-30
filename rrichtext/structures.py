@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from .base import JSONType, _ElementNode, _parse_element_list
+from .base import JSONType, _ElementNode, _parse_element, _parse_element_list
 from .media import AnimatedImage, Image
 from .reddit import _RedditLink
 from .text import Link, RawText, _TextNode
@@ -86,4 +86,30 @@ class List(_ElementNode):
 
 List._e = "list"
 
-_ListChild = Heading | List | Paragraph  # BlockQuote | CodeBlock |  HorizontalRule | Table
+
+@dataclass
+class BlockQuote(_ElementNode):
+    content: list["BlockQuoteNode"]
+    author: _TextNode | None = None
+
+    def to_jobj(self) -> JSONType:
+        r: dict[str, JSONType] = {"e": self._e, "c": [c.to_jobj() for c in self.content]}
+        if self.author:
+            r["a"] = self.author.to_jobj()
+        return r
+
+    @classmethod
+    def parse(cls, obj: JSONType) -> "BlockQuote":
+        cls._validate(obj)
+        a = cls._get_jobj_value(obj, ("a",), dict, True)
+        return cls(
+            _parse_element_list(cls._get_jobj_value(obj, ("c",), list), _BlockQuoteNode),
+            _parse_element(a, _TextNode) if a else None,
+        )
+
+
+BlockQuote._e = "blockquote"
+
+_ListChild = Heading | List | Paragraph | BlockQuote  # CodeBlock |  HorizontalRule | Table
+
+_BlockQuoteNode = BlockQuote | Heading | List | Paragraph  # | CodeBlock | Table;

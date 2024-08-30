@@ -51,7 +51,7 @@ class _ElementNode:
                 raise RTDecodeError("obj not a valid", obj)
             return None
         if not isinstance(obj[k], classinfo):
-            raise RTDecodeError("obj not a valid", obj)
+            raise RTDecodeError(f"obj not a valid: got {type(obj[k])} expecting {classinfo}", obj)
         return obj.get(k, None)
 
     @classmethod
@@ -135,17 +135,21 @@ def _parse_element_list(objs_list: JSONType, parent_class: UnionType | type) -> 
     elements = []
     if not isinstance(objs_list, list):
         raise RTDecodeError("Object not a list", objs_list)
-    _tags = {cls._e: cls for cls in _ElementNode.__subclasses__()}
     for obj in objs_list:
-        if not isinstance(obj, dict) or not isinstance(obj.get("e", None), str):
-            raise RTDecodeError("Object not a list", objs_list)
-        try:
-            subclass = _tags[cast(str, obj["e"])]
-        except KeyError as err:
-            raise RTDecodeError("Element not handled: " + str(obj["e"]), obj) from err
-        if not issubclass(subclass, parent_class):
-            raise RTDecodeError(
-                f"Element not expected: got {subclass} but expected {parent_class}", obj
-            )
-        elements.append(subclass.parse(obj))
+        elements.append(_parse_element(obj, parent_class))
     return elements
+
+
+def _parse_element(obj: JSONType, parent_class: UnionType | type) -> Any:
+    tags = {cls._e: cls for cls in _ElementNode.__subclasses__()}
+    if not isinstance(obj, dict) or not isinstance(obj.get("e", None), str):
+        raise RTDecodeError("Object not a valid node", obj)
+    try:
+        subclass = tags[cast(str, obj["e"])]
+    except KeyError as err:
+        raise RTDecodeError("Element not handled: " + str(obj["e"]), obj) from err
+    if not issubclass(subclass, parent_class):
+        raise RTDecodeError(
+            f"Element not expected: got {subclass} but expected {parent_class}", obj
+        )
+    return subclass.parse(obj)
