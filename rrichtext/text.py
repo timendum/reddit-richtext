@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from dataclasses import field as dcfield
 
-from .base import FormatRange, JSONType, _ElementNode, _parse_element_list
+from .base import FormatRange, JSONType, LineBreak, _ElementNode, _parse_element_list
 from .reddit import _RedditLink
 
 
@@ -55,19 +55,6 @@ class Link(_ElementNode):
 
 Link._e = "link"
 
-
-@dataclass
-class LineBreak(_ElementNode):
-    def to_jobj(self) -> JSONType:
-        return {"e": self._e}
-
-    @classmethod
-    def parse(cls, obj: JSONType) -> "LineBreak":
-        cls._validate(obj)
-        return cls()
-
-
-LineBreak._e = "br"
 
 _PlainText = Text | Link | _RedditLink | LineBreak
 

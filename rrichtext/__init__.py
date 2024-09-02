@@ -2,7 +2,7 @@
 
 __version__ = "0.0.1"
 
-from .base import FormatRange, RTDecodeError
+from .base import FormatRange, HorizontalRule, LineBreak, RTDecodeError
 from .document import RichTextContent
 from .media import AnimatedImage, Image, Video
 from .reddit import CommentLink, PostLink, SubredditLink, UserMention
@@ -18,7 +18,7 @@ from .structures import (
     TableHeaderCell,
     TableRow,
 )
-from .text import LineBreak, Link, RawText, SpoilerText, Text
+from .text import Link, RawText, SpoilerText, Text
 
 __all__ = [
     "FormatRange",
@@ -46,4 +46,5 @@ __all__ = [
     "TableCell",
     "TableHeaderCell",
     "TableRow",
+    "HorizontalRule",
 ]

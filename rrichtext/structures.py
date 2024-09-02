@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from .base import JSONType, _ElementNode, _parse_element, _parse_element_list
+from .base import HorizontalRule, JSONType, _ElementNode, _parse_element, _parse_element_list
 from .media import AnimatedImage, Image
 from .reddit import _RedditLink
 from .text import Link, RawText, SpoilerText, Text, _TextNode
@@ -206,6 +206,6 @@ class Table(_ElementNode):
 Table._e = "table"
 
 
-_ListChild = Heading | List | Paragraph | BlockQuote | CodeBlock | Table  # | HorizontalRule
+_ListChild = Heading | List | Paragraph | BlockQuote | CodeBlock | Table | HorizontalRule
 
 _BlockQuoteNode = BlockQuote | Heading | List | Paragraph | CodeBlock | Table

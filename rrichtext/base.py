@@ -143,3 +143,31 @@ def _parse_element(obj: JSONType, parent_class: UnionType | type) -> Any:
             f"Element not expected: got {subclass} but expected {parent_class}", obj
         )
     return subclass.parse(obj)
+
+
+@dataclass
+class LineBreak(_ElementNode):
+    def to_jobj(self) -> JSONType:
+        return {"e": self._e}
+
+    @classmethod
+    def parse(cls, obj: JSONType) -> "LineBreak":
+        cls._validate(obj)
+        return cls()
+
+
+LineBreak._e = "br"
+
+
+@dataclass
+class HorizontalRule(_ElementNode):
+    def to_jobj(self) -> JSONType:
+        return {"e": self._e}
+
+    @classmethod
+    def parse(cls, obj: JSONType) -> "HorizontalRule":
+        cls._validate(obj)
+        return cls()
+
+
+HorizontalRule._e = "hr"
