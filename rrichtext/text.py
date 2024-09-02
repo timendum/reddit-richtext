@@ -64,7 +64,7 @@ class SpoilerText(_ElementNode):
     content: list[_PlainText] = dcfield(default_factory=list)
 
     def to_jobj(self) -> JSONType:
-        return {"e": self._e, "c": [e.to_jobj() for e in self.contexts]}
+        return {"e": self._e, "c": [e.to_jobj() for e in self.content]}
 
     @classmethod
     def parse(cls, obj: JSONType) -> "SpoilerText":

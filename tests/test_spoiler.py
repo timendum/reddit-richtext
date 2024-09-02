@@ -14,11 +14,11 @@ def test_parsing():
             ],
         }
     )
-    assert e.contexts
-    assert len(e.contexts) == 2
-    assert hasattr(e.contexts[0], "text") and e.contexts[0].text == "spoiler "  # type: ignore
-    assert hasattr(e.contexts[1], "text") and e.contexts[1].text == "url"  # type: ignore
-    assert e.contexts[1]._e == "link"
+    assert e.content
+    assert len(e.content) == 2
+    assert hasattr(e.content[0], "text") and e.content[0].text == "spoiler "  # type: ignore
+    assert hasattr(e.content[1], "text") and e.content[1].text == "url"  # type: ignore
+    assert e.content[1]._e == "link"
 
 
 def test_parsing_errors():
