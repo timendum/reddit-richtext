@@ -61,7 +61,7 @@ _PlainText = Text | Link | _RedditLink | LineBreak
 
 @dataclass
 class SpoilerText(_ElementNode):
-    contexts: list[_PlainText] = dcfield(default_factory=list)
+    content: list[_PlainText] = dcfield(default_factory=list)
 
     def to_jobj(self) -> JSONType:
         return {"e": self._e, "c": [e.to_jobj() for e in self.contexts]}

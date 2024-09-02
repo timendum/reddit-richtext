@@ -209,3 +209,33 @@ Table._e = "table"
 _ListChild = Heading | List | Paragraph | BlockQuote | CodeBlock | Table | HorizontalRule
 
 _BlockQuoteNode = BlockQuote | Heading | List | Paragraph | CodeBlock | Table
+
+
+@dataclass
+class Embed(_ElementNode):
+    sourceUrl: str
+    contentUrl: str
+    width: int
+    height: int
+
+    def to_jobj(self) -> JSONType:
+        return {
+            "e": self._e,
+            "u": self.sourceUrl,
+            "c": self.contentUrl,
+            "x": self.width,
+            "y": self.height,
+        }
+
+    @classmethod
+    def parse(cls, obj: JSONType) -> "Embed":
+        cls._validate(obj)
+        return cls(
+            cls._get_jobj_value(obj, "u", str),
+            cls._get_jobj_value(obj, "c", str),
+            cls._get_jobj_value(obj, "x", int),
+            cls._get_jobj_value(obj, "y", int),
+        )
+
+
+Embed._e = "embed"
