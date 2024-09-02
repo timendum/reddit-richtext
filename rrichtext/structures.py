@@ -108,6 +108,30 @@ class BlockQuote(_ElementNode):
 
 BlockQuote._e = "blockquote"
 
-_ListChild = Heading | List | Paragraph | BlockQuote  # CodeBlock |  HorizontalRule | Table
 
-_BlockQuoteNode = BlockQuote | Heading | List | Paragraph  # | CodeBlock | Table;
+@dataclass
+class CodeBlock(_ElementNode):
+    content: list["RawText"]
+    language: str | None = None
+
+    def to_jobj(self) -> JSONType:
+        r: dict[str, JSONType] = {"e": self._e, "c": [c.to_jobj() for c in self.content]}
+        if self.language:
+            r["l"] = self.language
+        return r
+
+    @classmethod
+    def parse(cls, obj: JSONType) -> "CodeBlock":
+        cls._validate(obj)
+        return cls(
+            _parse_element_list(cls._get_jobj_value(obj, "c", list), RawText),
+            cls._get_jobj_value(obj, "l", str, True),
+        )
+
+
+CodeBlock._e = "code"
+
+
+_ListChild = Heading | List | Paragraph | BlockQuote | CodeBlock  # | HorizontalRule | Table
+
+_BlockQuoteNode = BlockQuote | Heading | List | Paragraph | CodeBlock  # | Table;
