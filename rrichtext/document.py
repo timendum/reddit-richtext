@@ -3,11 +3,11 @@ from dataclasses import dataclass
 
 from .base import JSONType, RTDecodeError, _parse_element_list
 from .media import _Media
-from .structures import Heading, List, Paragraph
+from .structures import BlockQuote, CodeBlock, Heading, List, Paragraph, Table
 
 _DocumentNode = (
-    Paragraph | _Media | Heading | _Media | List
-)  # | HorizontalRule | BlockQuote | CodeBlock | Embed | Table
+    Paragraph | _Media | Heading | _Media | List | Table | CodeBlock | BlockQuote
+)  # | HorizontalRule | Embed
 
 
 @dataclass

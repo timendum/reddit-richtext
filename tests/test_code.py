@@ -26,7 +26,7 @@ def test_parsing():
 def test_parsing_errors():
     # e tag
     with pytest.raises(RTDecodeError):
-        e = CodeBlock.parse({"e": "t", "c": [{"e": "raw", "t": "lorem"}]})
+        CodeBlock.parse({"e": "t", "c": [{"e": "raw", "t": "lorem"}]})
     # no c
     with pytest.raises(RTDecodeError):
         CodeBlock.parse({"e": "code", "t": 0})

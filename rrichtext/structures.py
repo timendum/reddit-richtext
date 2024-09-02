@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from .base import JSONType, _ElementNode, _parse_element, _parse_element_list
 from .media import AnimatedImage, Image
 from .reddit import _RedditLink
-from .text import Link, RawText, _TextNode
+from .text import Link, RawText, SpoilerText, Text, _TextNode
 
 _ParagraphContentNode = _TextNode | Image | AnimatedImage
 
@@ -132,6 +132,80 @@ class CodeBlock(_ElementNode):
 CodeBlock._e = "code"
 
 
-_ListChild = Heading | List | Paragraph | BlockQuote | CodeBlock  # | HorizontalRule | Table
+_TableCellText = Text | Link | _RedditLink | SpoilerText | Image | AnimatedImage
 
-_BlockQuoteNode = BlockQuote | Heading | List | Paragraph | CodeBlock  # | Table;
+
+@dataclass
+class TableHeaderCell:
+    content: list[_TableCellText]
+    alignment: str | None = None
+
+    @classmethod
+    def parse(cls, obj: JSONType) -> "TableHeaderCell":
+        return cls(
+            _parse_element_list(_ElementNode._get_jobj_value(obj, "c", list), _TableCellText),
+            _ElementNode._get_jobj_value(obj, "a", str, True),
+        )
+
+    def to_jobj(self) -> JSONType:
+        r: dict[str, JSONType] = {"c": [c.to_jobj() for c in self.content]}
+        if self.alignment:
+            r["a"] = self.alignment
+        return r
+
+
+@dataclass
+class TableCell:
+    content: list[_TableCellText]
+
+    @classmethod
+    def parse(cls, obj: JSONType) -> "TableCell":
+        return cls(
+            _parse_element_list(_ElementNode._get_jobj_value(obj, "c", list), _TableCellText),
+        )
+
+    def to_jobj(self) -> JSONType:
+        r: dict[str, JSONType] = {"c": [c.to_jobj() for c in self.content]}
+        return r
+
+
+@dataclass
+class TableRow:
+    content: list[TableCell]
+
+    @classmethod
+    def parse(cls, obj: list[JSONType]) -> "TableRow":
+        return cls([TableCell.parse(e) for e in obj])
+
+    def to_jobj(self) -> JSONType:
+        return [c.to_jobj() for c in self.content]
+
+
+@dataclass
+class Table(_ElementNode):
+    headerContent: list[TableHeaderCell]
+    rowContent: list[TableRow]
+
+    def to_jobj(self) -> JSONType:
+        r: dict[str, JSONType] = {
+            "e": self._e,
+            "h": [c.to_jobj() for c in self.headerContent],
+            "c": [c.to_jobj() for c in self.rowContent],
+        }
+        return r
+
+    @classmethod
+    def parse(cls, obj: JSONType) -> "Table":
+        cls._validate(obj)
+        return cls(
+            [TableHeaderCell.parse(e) for e in cls._get_jobj_value(obj, "h", list)],
+            [TableRow.parse(e) for e in cls._get_jobj_value(obj, "c", list)],
+        )
+
+
+Table._e = "table"
+
+
+_ListChild = Heading | List | Paragraph | BlockQuote | CodeBlock | Table  # | HorizontalRule
+
+_BlockQuoteNode = BlockQuote | Heading | List | Paragraph | CodeBlock | Table

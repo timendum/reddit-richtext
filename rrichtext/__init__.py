@@ -6,7 +6,18 @@ from .base import FormatRange, RTDecodeError
 from .document import RichTextContent
 from .media import AnimatedImage, Image, Video
 from .reddit import CommentLink, PostLink, SubredditLink, UserMention
-from .structures import BlockQuote, CodeBlock, Heading, List, ListElement, Paragraph
+from .structures import (
+    BlockQuote,
+    CodeBlock,
+    Heading,
+    List,
+    ListElement,
+    Paragraph,
+    Table,
+    TableCell,
+    TableHeaderCell,
+    TableRow,
+)
 from .text import LineBreak, Link, RawText, SpoilerText, Text
 
 __all__ = [
@@ -31,4 +42,8 @@ __all__ = [
     "List",
     "BlockQuote",
     "CodeBlock",
+    "Table",
+    "TableCell",
+    "TableHeaderCell",
+    "TableRow",
 ]
