@@ -48,3 +48,11 @@ __all__ = [
     "TableRow",
     "HorizontalRule",
 ]
+
+
+try:
+    from . import rpraw  # noqa: F401
+
+    __all__.append("rpraw")
+except ImportError:
+    pass
